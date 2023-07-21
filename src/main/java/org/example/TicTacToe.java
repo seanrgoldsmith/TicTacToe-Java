@@ -1,10 +1,11 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class TicTacToe {
+
+    static ArrayList<Integer> playerPositions = new ArrayList<Integer>();
+    static ArrayList<Integer> cpuPositions = new ArrayList<Integer>();
     public static void main(String[] args) {
 
 //        Random random = new Random();
@@ -25,20 +26,24 @@ public class TicTacToe {
 
         displayBoard(board);
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Select an open position 1-9:");
-        int placement = scanner.nextInt();
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Select an open position 1-9:");
+            int playerPlacement = scanner.nextInt();
 
-        selectPosition(board, placement, "Player");
+            selectPosition(board, playerPlacement, "Player");
 
-        Random cpuRand = new Random();
-        int cpuPosition = cpuRand.nextInt(9) + 1;
+            Random cpuRand = new Random();
+            int cpuPlacement = cpuRand.nextInt(9) + 1;
 
-        selectPosition(board, cpuPosition, "CPU");
+            selectPosition(board, cpuPlacement, "CPU");
 
-        displayBoard(board);
+            displayBoard(board);
 
+            String results = checkWinConditions();
+            System.out.println(results);
         }
+    }
     public static void displayBoard(String[][] board) {
         for (String[] row : board) {
             for (String character : row) {
@@ -53,8 +58,10 @@ public class TicTacToe {
 
         if (player.equals("Player")) {
             marker = " X ";
+            playerPositions.add(placement);
         } else if (player.equals("CPU")) {
             marker = " O ";
+            cpuPositions.add(placement);
         }
 
         switch(placement) {
@@ -85,6 +92,42 @@ public class TicTacToe {
             case 9:
                 board[4][4] = marker;
                 break;
+            default:
+                break;
         }
     }
+    public static String checkWinConditions() {
+        List<Integer> topRow = Arrays.asList(1, 2, 3);
+        List<Integer> middleRow = Arrays.asList(4, 5, 6);
+        List<Integer> bottomRow = Arrays.asList(7, 8, 9);
+        List<Integer> leftColumn = Arrays.asList(1, 4, 7);
+        List<Integer> middleColumn = Arrays.asList(2, 5, 8);
+        List<Integer> rightColumn = Arrays.asList(3, 6, 9);
+        List<Integer> leftCross = Arrays.asList(1, 5, 9);
+        List<Integer> rightCross = Arrays.asList(3, 5, 7);
+
+        List<List> winConditions = new ArrayList<List>();
+        winConditions.add(topRow);
+        winConditions.add(middleRow);
+        winConditions.add(bottomRow);
+        winConditions.add(leftColumn);
+        winConditions.add(middleColumn);
+        winConditions.add(rightColumn);
+        winConditions.add(leftCross);
+        winConditions.add(rightCross);
+
+        for (List win : winConditions) {
+            if (playerPositions.containsAll(win)) {
+                return "Congratulations! You win!!!";
+            } else if (cpuPositions.containsAll(win)) {
+                return "The CPU has bested you! Better luck next time!";
+            } else if ((playerPositions.size() + cpuPositions.size() == 9)) {
+                return "The game is a tie!";
+            }
+        }
+
+
+        return "";
+    }
+
     }
