@@ -35,14 +35,22 @@ public class TicTacToe {
 
             Random cpuRand = new Random();
             int cpuPlacement = cpuRand.nextInt(9) + 1;
+            if (!playerPositions.contains(cpuPlacement)) {
+                    selectPosition(board, cpuPlacement, "CPU");
+                    displayBoard(board);
+                    String results = checkWinConditions();
+                    System.out.println(results);
 
-            selectPosition(board, cpuPlacement, "CPU");
-
-            displayBoard(board);
-
-            String results = checkWinConditions();
-            System.out.println(results);
+            }
         }
+    }
+    //TODO add method to check if position is taken during CPU and Player moves
+    public static boolean checkBoardState() {
+        return true;
+    }
+    //TODO implement minimax algorithm
+    public static int minimax() {
+        return 0;
     }
     public static void displayBoard(String[][] board) {
         for (String[] row : board) {
